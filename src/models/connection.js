@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { applyTimestamps } = require('./user');
 
 
 const connectionSchema = mongoose.Schema({
@@ -16,10 +17,17 @@ const connectionSchema = mongoose.Schema({
             values: [ "interested", "rejected", "accepted", "ignored"],
             message: '{VALUE} is not valid! '
         }
-    }
+    },
+}, {
+    timestamps: true
 })
 
-
+connectionSchema.pre("save", function () {
+    const connection = this;
+    if( new mongoose.Types.ObjectId(this.toUserId).equals(this.fromUserId) ) {
+        throw new Error("Request cannot be sent to yourself!!");
+    }
+})
 
 
 module.exports = mongoose.model("connectionRequest", connectionSchema);
