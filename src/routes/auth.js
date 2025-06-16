@@ -49,9 +49,15 @@ authRouter.post("/login", async (req, res) => {
             const token = await user.getJWT();
 
             res.cookie('token', token, {
+                // httpOnly: true,
+                // secure: false,
+                // sameSite: 'lax',
                 expires: new Date(Date.now() + 8 * 3600000)
             });
-            res.send("Welcome " + user.firstName + " " + user.lastName);
+            res.json({
+                "message" : `Welcome ${user.firstName} ${user.lastName}`,
+                "data": user
+            });
         
 
     } catch (err) {
@@ -67,4 +73,4 @@ authRouter.post("/logout", async (req, res) => {
 })
 
 
-module.exports = authRouter; 
+module.exports = authRouter;  
