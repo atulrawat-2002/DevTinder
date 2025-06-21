@@ -20,10 +20,9 @@ const userSchema = new mongoose.Schema({
         required: true,
         lowercase: true,
         trim: true,
-        validate: (value) => {
-            if(!validator.isEmail(value)){
-                throw new Error("Please enter a valid email!" + value);
-            }
+         validate: {
+            validator: (value) => validator.isEmail(value),
+            message: (props) => `Please enter a valid email! You entered: ${props.value}`
         }
     },
     password: {
@@ -38,13 +37,13 @@ const userSchema = new mongoose.Schema({
         type: String,
         validate: {
             validator: function (value) {
-                if (!["male", "female", "others"].includes(value)) {
+                if (!["male", "female", "other"].includes(value)) {
                     throw new Error("Enter a valid value!")
                 }
             },
         },
     },
-    about: {
+    about: {  
         type: String,
         default: "This is a default about for this user"
     },
@@ -74,7 +73,7 @@ userSchema.methods.getJWT = async function() {
 
 userSchema.methods.validatePassword = async function(password) {
     const user = this;
-    isPasswordValid = bcrypt.compare(password, user.password);
+    isPasswordValid = await bcrypt.compare(password, user.password);
 
     return isPasswordValid;
 }  

@@ -35,9 +35,8 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
                 { toUserId: loggedInUser }
             ],
             status: "accepted"
-        }).populate("fromUserId", ["firstName", "lastName"]).populate("toUserId", ["firstName", "lastName"]);
-
-        if(!allConnections) {
+        }).populate("fromUserId", ["firstName", "lastName", "photoUrl", "age"]).populate("toUserId", ["firstName", "lastName", "photoUrl", "age"]);
+        if(allConnections.length === 0) {
              res.send("You don't have any connections yet");
              return;
         }
@@ -50,7 +49,6 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
             }
         } )
 
-        console.log(allConnections)
 
     res.json(
         { 
@@ -94,7 +92,7 @@ userRouter.get("/user/feed", userAuth, async (req, res) => {
             { _id: {$ne: loggedInUser._id} }
         ] 
     })
-    .select(["firstName", "lastName"])
+    .select(["-emailId", "-password"])
     .skip(skip)
     .limit(limit)
 

@@ -25,13 +25,15 @@ app.use("/", profileRouter);
 app.use("/", requestRouter);
 app.use("/", userRouter);
 
-
+try {
 
 connectDb().then(() => {
     console.log("Connected to database");
     app.listen(5678, () => {
         console.log("server is listening on port no. 5678")
     })
-}).catch((err) => {
-    console.log(err);
-}) 
+})
+
+} catch (err) {
+    console.log("ERROR: ", err);
+}
