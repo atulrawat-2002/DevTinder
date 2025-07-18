@@ -55,12 +55,12 @@ const userSchema = new mongoose.Schema({
     },
     photoUrl: {
         type: String,
-        default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4DOwclUzayE37CAsCl_54FNRmeEuxES-2CQ&s",
+        default: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png",
         validate: url => validator.isURL(url)
-    }
+    } 
 }, {
     timestamps: true
-})
+})  
 
 userSchema.methods.getJWT = async function() {
     const user = this;
